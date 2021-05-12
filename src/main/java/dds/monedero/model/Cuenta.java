@@ -24,28 +24,15 @@ public class Cuenta { // Posible God Class
   // En ningun momento se actualiza saldo
 
   public void poner(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
-
-    // Verificaciones deberian ser metodos propios, poner hace muchas cosas
+    verificarMontoNegativo(cuanto);
+    verificarMaximaCantidadDeposito();
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
   public void sacar(double cuanto) {
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
-    if (getSaldo() - cuanto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
-
-    // Verificaciones deberian ser metodos propios, no solo sacar hace mucho, repite codigo
+    verificarMontoNegativo(cuanto);
+    verificarSaldoMenor(cuanto);
 
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy; // Limite deberia ser un getter
@@ -77,6 +64,24 @@ public class Cuenta { // Posible God Class
 
   public double getSaldo() {
     return saldo;
+  }
+
+  void verificarMontoNegativo(double cuanto) {
+    if (cuanto <= 0) {
+      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+    }
+  }
+
+  void verificarSaldoMenor(double cuanto) {
+    if (getSaldo() - cuanto < 0) {
+      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+    }
+  }
+
+  void verificarMaximaCantidadDeposito() {
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+    }
   }
 
 }
