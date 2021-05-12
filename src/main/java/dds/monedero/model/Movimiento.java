@@ -35,18 +35,20 @@ public class Movimiento {
     return this.fecha.equals(fecha);
   }
 
-  public boolean isDeposito() {
+  public boolean isDeposito() { // Algo mal
     return esDeposito;
   }
 
-  public boolean isExtraccion() {
+  public boolean isExtraccion() { // Algo mal, hacer herencias
     return !esDeposito;
   }
+
+  // Muchos getters y verificaciones, semi data class (pero si se mete en cuenta esta seria god class)
 
   public void agregateA(Cuenta cuenta) {
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
-  }
+  } // Responsabilidad de cuenta agregarse un movimiento, misplaced method
 
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
