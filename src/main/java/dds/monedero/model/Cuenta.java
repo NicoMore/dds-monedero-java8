@@ -33,15 +33,7 @@ public class Cuenta { // Posible God Class
   public void sacar(double cuanto) {
     verificarMontoNegativo(cuanto);
     verificarSaldoMenor(cuanto);
-
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy; // Limite deberia ser un getter
-    if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
-          + " diarios, límite: " + limite);
-    }
-
-    // Lo de arriba no corresponde a sacar
+    verificarExtraccionMaxima(cuanto);
 
     new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
@@ -82,6 +74,17 @@ public class Cuenta { // Posible God Class
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
+  }
+
+  void verificarExtraccionMaxima(double cuanto) {
+    if (cuanto > getLimite()) {
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+          + " diarios, límite: " + limite);
+    }
+  }
+
+  double getLimite() {
+    return 1000 - getMontoExtraidoA(LocalDate.now());
   }
 
 }
