@@ -15,7 +15,6 @@ public class Cuenta { // Posible God Class
   private List<Movimiento> movimientos = new ArrayList<>();
 
   public Cuenta() {
-    saldo = 0; // Innecesario, ya se settea
   }
 
   public Cuenta(double montoInicial) {
