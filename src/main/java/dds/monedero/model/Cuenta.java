@@ -21,12 +21,11 @@ public class Cuenta { // Posible God Class
     saldo = montoInicial;
   }
 
-  // En ningun momento se actualiza saldo
-
   public void poner(double cuanto) {
     verificarMontoNegativo(cuanto);
     verificarMaximaCantidadDeposito();
     agregarDeposito(LocalDate.now(), cuanto);
+    saldo += cuanto;
   }
 
   public void sacar(double cuanto) {
@@ -34,6 +33,7 @@ public class Cuenta { // Posible God Class
     verificarSaldoMenor(cuanto);
     verificarExtraccionMaxima(cuanto);
     agregarExtraccion(LocalDate.now(), cuanto);
+    saldo -= cuanto;
   }
 
   public void agregarDeposito(LocalDate fecha, double cuanto) {
