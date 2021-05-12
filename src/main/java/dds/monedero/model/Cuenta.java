@@ -12,7 +12,8 @@ import java.util.List;
 public class Cuenta { // Posible God Class
 
   private double saldo = 0;
-  private List<Movimiento> movimientos = new ArrayList<>();
+  private List<Deposito> depositos = new ArrayList<>();
+  private List<Extraccion> extracciones = new ArrayList<>();
 
   public Cuenta() {
   }
@@ -37,24 +38,28 @@ public class Cuenta { // Posible God Class
   }
 
   public void agregarDeposito(LocalDate fecha, double cuanto) {
-    Movimiento movimiento = new Deposito(fecha, cuanto);
-    movimientos.add(movimiento);
+    Deposito deposito = new Deposito(fecha, cuanto);
+    depositos.add(deposito);
   }
 
   public void agregarExtraccion(LocalDate fecha, double cuanto) {
-    Movimiento movimiento = new Extraccion(fecha, cuanto);
-    movimientos.add(movimiento);
+    Extraccion extraccion = new Extraccion(fecha, cuanto);
+    extracciones.add(extraccion);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
-    return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
-        .mapToDouble(Movimiento::getMonto)
+    return getExtracciones().stream()
+        .filter(extraccion -> extraccion.getFecha().equals(fecha))
+        .mapToDouble(Extraccion::getMonto)
         .sum();
   }
 
-  public List<Movimiento> getMovimientos() {
-    return movimientos;
+  public List<Movimiento> getExtracciones() {
+    return extracciones;
+  }
+
+  public List<Movimiento> getDepositos() {
+    return depositos;
   }
 
   public double getSaldo() {
@@ -74,7 +79,7 @@ public class Cuenta { // Posible God Class
   }
 
   void verificarMaximaCantidadDeposito() {
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+    if (getDepositos().stream().count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
   }
