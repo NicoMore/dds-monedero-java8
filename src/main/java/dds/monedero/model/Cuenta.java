@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cuenta { // Posible God Class
+public class Cuenta {
 
   private double saldo = 0;
   private List<Deposito> depositos = new ArrayList<>();
@@ -20,6 +20,22 @@ public class Cuenta { // Posible God Class
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;
+  }
+
+  public List<Movimiento> getExtracciones() {
+    return extracciones;
+  }
+
+  public List<Movimiento> getDepositos() {
+    return depositos;
+  }
+
+  public double getSaldo() {
+    return saldo;
+  }
+
+  double getLimite() {
+    return 1000 - getMontoExtraidoA(LocalDate.now());
   }
 
   public void poner(double cuanto) {
@@ -54,18 +70,6 @@ public class Cuenta { // Posible God Class
         .sum();
   }
 
-  public List<Movimiento> getExtracciones() {
-    return extracciones;
-  }
-
-  public List<Movimiento> getDepositos() {
-    return depositos;
-  }
-
-  public double getSaldo() {
-    return saldo;
-  }
-
   void verificarMontoNegativo(double cuanto) {
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
@@ -89,10 +93,6 @@ public class Cuenta { // Posible God Class
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + getLimite());
     }
-  }
-
-  double getLimite() {
-    return 1000 - getMontoExtraidoA(LocalDate.now());
   }
 
 }
