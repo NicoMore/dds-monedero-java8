@@ -78,4 +78,10 @@ public class MonederoTest {
     assertEquals(cuenta.getExtracciones().size(), 2, 0);
   }
 
+  @Test
+  public void cuentaConSaldoInicial() {
+    Cuenta cuentaPreexistente = new Cuenta(2000);
+    assertEquals(cuentaPreexistente.getSaldo(), 2000, 0);
+  }
+
 }
