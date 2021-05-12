@@ -4,10 +4,12 @@ import dds.monedero.exceptions.MaximaCantidadDepositosException;
 import dds.monedero.exceptions.MaximoExtraccionDiarioException;
 import dds.monedero.exceptions.MontoNegativoException;
 import dds.monedero.exceptions.SaldoMenorException;
+import jdk.vm.ci.meta.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Cuenta {
 
@@ -22,11 +24,11 @@ public class Cuenta {
     saldo = montoInicial;
   }
 
-  public List<Movimiento> getExtracciones() {
+  public List<Extraccion> getExtracciones() {
     return extracciones;
   }
 
-  public List<Movimiento> getDepositos() {
+  public List<Deposito> getDepositos() {
     return depositos;
   }
 
@@ -36,6 +38,14 @@ public class Cuenta {
 
   double getLimite() {
     return 1000 - getMontoExtraidoA(LocalDate.now());
+  }
+
+  public double getMontoExtraidoA(LocalDate fecha) {
+    return getExtraccionesDeUnaFecha(fecha).mapToDouble(extraccion -> extraccion.getMonto()).sum();
+  }
+
+  Stream<Extraccion> getExtraccionesDeUnaFecha(LocalDate fecha) {
+    return getExtracciones().stream().filter(extraccion -> extraccion.fueExtraido(fecha));
   }
 
   public void poner(double cuanto) {
@@ -63,13 +73,6 @@ public class Cuenta {
     extracciones.add(extraccion);
   }
 
-  public double getMontoExtraidoA(LocalDate fecha) {
-    return getExtracciones().stream()
-        .filter(extraccion -> extraccion.getFecha().equals(fecha))
-        .mapToDouble(extraccion -> extraccion.getMonto())
-        .sum();
-  }
-
   void verificarMontoNegativo(double cuanto) {
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
@@ -90,8 +93,7 @@ public class Cuenta {
 
   void verificarExtraccionMaxima(double cuanto) {
     if (cuanto > getLimite()) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
-          + " diarios, límite: " + getLimite());
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000 + " diarios, límite: " + getLimite());
     }
   }
 
