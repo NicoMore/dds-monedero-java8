@@ -26,22 +26,25 @@ public class Cuenta { // Posible God Class
   public void poner(double cuanto) {
     verificarMontoNegativo(cuanto);
     verificarMaximaCantidadDeposito();
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    agregarDeposito(LocalDate.now(), cuanto);
   }
 
   public void sacar(double cuanto) {
     verificarMontoNegativo(cuanto);
     verificarSaldoMenor(cuanto);
     verificarExtraccionMaxima(cuanto);
-
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    agregarExtraccion(LocalDate.now(), cuanto);
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarDeposito(LocalDate fecha, double cuanto) {
+    Movimiento movimiento = new Deposito(fecha, cuanto);
     movimientos.add(movimiento);
-  } // Nunca se usa en sacar y poner, que podria ser util
+  }
+
+  public void agregarExtraccion(LocalDate fecha, double cuanto) {
+    Movimiento movimiento = new Extraccion(fecha, cuanto);
+    movimientos.add(movimiento);
+  }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
@@ -79,7 +82,7 @@ public class Cuenta { // Posible God Class
   void verificarExtraccionMaxima(double cuanto) {
     if (cuanto > getLimite()) {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
-          + " diarios, límite: " + limite);
+          + " diarios, límite: " + getLimite());
     }
   }
 
