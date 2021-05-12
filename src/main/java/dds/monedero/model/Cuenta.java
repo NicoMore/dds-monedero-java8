@@ -66,7 +66,7 @@ public class Cuenta {
   public double getMontoExtraidoA(LocalDate fecha) {
     return getExtracciones().stream()
         .filter(extraccion -> extraccion.getFecha().equals(fecha))
-        .mapToDouble(Extraccion::getMonto)
+        .mapToDouble(extraccion -> extraccion.getMonto())
         .sum();
   }
 
