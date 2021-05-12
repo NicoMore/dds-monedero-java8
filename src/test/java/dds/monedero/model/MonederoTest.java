@@ -12,23 +12,23 @@ public class MonederoTest {
   private Cuenta cuenta;
 
   @BeforeEach
-  void init() {
+  public void init() {
     cuenta = new Cuenta();
   }
 
   @Test
-  void saldoEsDe1500() {
+  public void saldoEsDe1500() {
     cuenta.poner(1500);
     assertEquals(cuenta.getSaldo(), 1500, 0);
   }
 
   @Test
-  void ponerMontoNegativoLanzaExcepcion() {
+  public void ponerMontoNegativoLanzaExcepcion() {
     assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
   }
 
   @Test
-  void saldoEsDe3856() {
+  public void saldoEsDe3856() {
     cuenta.poner(1500);
     cuenta.poner(456);
     cuenta.poner(1900);
@@ -36,12 +36,12 @@ public class MonederoTest {
   }
 
   @Test
-  void intentarMasDeTresDepositosLanzaError() {
+  public void intentarMasDeTresDepositosLanzaError() {
     assertThrows(MaximaCantidadDepositosException.class, () -> { cuenta.poner(1500); cuenta.poner(456); cuenta.poner(1900); cuenta.poner(245);});
   }
 
   @Test
-  void extraerMasQueElSaldoLanzaError() {
+  public void extraerMasQueElSaldoLanzaError() {
     assertThrows(SaldoMenorException.class, () -> { cuenta.poner(90); cuenta.sacar(1001);});
   }
 
@@ -54,6 +54,28 @@ public class MonederoTest {
   @Test
   public void extraerMontoNegativoLanzaError() {
     assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
+  }
+
+  @Test
+  public void saldoEsDe0() {
+    cuenta.poner(1000);
+    cuenta.sacar(1000);
+    assertEquals(cuenta.getSaldo(), 0, 0);
+  }
+
+  @Test
+  public void seRegistranDosDepositos() {
+    cuenta.poner(5);
+    cuenta.poner(7);
+    assertEquals(cuenta.getDepositos().size(), 2, 0);
+  }
+
+  @Test
+  public void seRegistranDosExtracciones() {
+    cuenta.poner(100);
+    cuenta.sacar(7);
+    cuenta.sacar(7);
+    assertEquals(cuenta.getExtracciones().size(), 2, 0);
   }
 
 }
