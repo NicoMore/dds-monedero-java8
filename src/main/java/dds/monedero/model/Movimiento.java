@@ -1,5 +1,7 @@
 package dds.monedero.model;
 
+import jdk.vm.ci.meta.Local;
+
 import java.time.LocalDate;
 
 public class Movimiento {
@@ -21,8 +23,5 @@ public class Movimiento {
     return fecha;
   }
 
-  public boolean esDeLaFecha(LocalDate fecha) {
-    return this.fecha.equals(fecha);
-  }
 }
 

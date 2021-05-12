@@ -9,6 +9,6 @@ public class Extraccion extends Movimiento {
   }
 
   public boolean fueExtraido(LocalDate fecha) {
-    return esDeLaFecha(fecha);
+    return  getFecha().equals(fecha);
   }
 }
