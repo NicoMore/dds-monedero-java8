@@ -21,10 +21,6 @@ public class Cuenta { // Posible God Class
     saldo = montoInicial;
   }
 
-  public void setMovimientos(List<Movimiento> movimientos) { // No deberia haber un setter de movimientos
-    this.movimientos = movimientos;
-  }
-
   // En ningun momento se actualiza saldo
 
   public void poner(double cuanto) {
@@ -81,10 +77,6 @@ public class Cuenta { // Posible God Class
 
   public double getSaldo() {
     return saldo;
-  }
-
-  public void setSaldo(double saldo) { // No deberia haber un setter de saldo
-    this.saldo = saldo;
   }
 
 }
